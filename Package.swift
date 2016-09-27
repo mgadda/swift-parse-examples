@@ -3,6 +3,6 @@ import PackageDescription
 let package = Package(
     name: "swift-parse-example",
     dependencies: [
-      .Package(url: "file:///Users/mgadda/workspace/swift-parse", majorVersion: 0)
+      .Package(url: "https://github.com/mgadda/swift-parse", majorVersion: 0)
     ]
 )
