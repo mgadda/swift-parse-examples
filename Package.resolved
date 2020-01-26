@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftParse",
+        "repositoryURL": "https://github.com/mgadda/swift-parse",
+        "state": {
+          "branch": "0.4.0",
+          "revision": "33abc51be5ef8e9677634317d93ded5629083df2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

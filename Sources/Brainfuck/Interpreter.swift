@@ -2,19 +2,19 @@ import SwiftParse
 
 class Brainfuck {
   var memory = ContiguousArray<Int8>(repeating: 0, count: 1024)
-  var p: Int = 0
+  var ptr: Int = 0
   let ast: [Instruction]
 
   init?(source: String) {
-    switch parseBrainfuck(source: source) {
-    case let .some(instructions, next):
-      if !next.isEmpty {
-        print("Syntax error at \(next)")
+    switch BrainfuckParser.program(AnyCollection(source)) {
+    case let .success((instructions, out)):
+      if !out.isEmpty {
+        print("Syntax error at \(out)")
         return nil
       }
       ast = instructions
-    default:
-      print("Syntax error")
+    case let .failure(error):
+      print(error)
       return nil
     }
   }
@@ -27,23 +27,23 @@ class Brainfuck {
     for instruction in instructions {
       switch instruction {
       case .incPointer:
-        if p < 1023 {
-          p += 1
+        if ptr < 1023 {
+          ptr += 1
         }
       case .decPointer:
-        if p > 0 {
-          p -= 1
+        if ptr > 0 {
+          ptr -= 1
         }
       case .incByte:
-        memory[p] += 1
+        memory[ptr] += 1
       case .decByte:
-        memory[p] -= 1
+        memory[ptr] -= 1
       case .writeByte:
-        print(UnicodeScalar(Int(memory[p])) ?? "", terminator: "")
+        print(UnicodeScalar(Int(memory[ptr])) ?? "", terminator: "")
       case .readByte:
-        memory[p] = Int8(readLine(strippingNewline: true)!) ?? 0
+        memory[ptr] = Int8(readLine(strippingNewline: true)!) ?? 0
       case let .loop(loopInstructions):
-        while memory[p] != 0 {
+        while memory[ptr] != 0 {
           eval(loopInstructions)
         }
       }
@@ -51,7 +51,7 @@ class Brainfuck {
   }
 
   var debugDescription: String {
-    var desc = "\nPointer = \(p)"
+    var desc = "\nPointer = \(ptr)"
     desc += "\nMemory = \n"
     desc += memory.debugDescription
     return desc
